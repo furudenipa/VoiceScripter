@@ -108,7 +108,6 @@ class VoiceToTextApp:
     def transcribe(self):
         if self.audio_path:
             def _transcribe():
-                # button を止める
                 self.transcribe_button.config(state=tk.DISABLED, text="音声データを処理中...")
                 self.load_button.config(state=tk.DISABLED, text="モデルを展開")
 
@@ -118,7 +117,6 @@ class VoiceToTextApp:
                 self.result_text.delete(1.0, tk.END)
                 self.result_text.insert(tk.END, result)
                 
-                # buttonを使用可能に
                 self.transcribe_button.config(state=tk.NORMAL, text="音声データを処理")
                 self.load_button.config(state=tk.NORMAL, text="モデルを展開")
 

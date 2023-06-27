@@ -8,7 +8,7 @@ class DummyVoiceModel:
         self.model = None
 
     def load_model(self, size):
-        self.model=whisper.load_model(size)  # モデル読み込みをシミュレート
+        self.model=whisper.load_model(size)
         self.is_loaded = True
 
     def transcribe(self, audio_path, lang_option, newline_option):
