@@ -21,7 +21,9 @@ main.pyで実行
 # Note
 
  - Largeは10GB, Mediumは5GBのメモリを要求
- - Largeはかなり遅いので、
+ - Largeはかなり遅い, 元データの長さとほぼ同時間かかる。
+ - whisperはPATH通しておくこと
+ 
 # License
 
 特になし(FSF)
