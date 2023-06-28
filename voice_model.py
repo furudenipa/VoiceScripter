@@ -2,7 +2,7 @@ import whisper
 import time
 from datetime import timedelta
 x = 0
-class DummyVoiceModel:
+class VoiceModel:
     def __init__(self):
         self.is_loaded = False
         self.model = None
