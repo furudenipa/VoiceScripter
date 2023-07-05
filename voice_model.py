@@ -1,17 +1,24 @@
-import whisper
-import time
-from datetime import timedelta
+from faster_whisper import WhisperModel
+import torch
 x = 0
 class VoiceModel:
     def __init__(self):
         self.is_loaded = False
         self.model = None
+        if torch.cuda.is_available():
+            self.device = "cuda"
+        else:
+            self.device = "cpu"
 
     def load_model(self, size):
-        self.model=whisper.load_model(size)
+        self.model= WhisperModel(
+            model_size_or_path = size ,
+            device = self.device,
+            compute_type = "int8_float16" if self.device == "cuda" else "int8",
+        )
         self.is_loaded = True
 
-    def transcribe(self, audio_path, lang_option, newline_option):
+    def transcribe(self, audio_path, lang_option, timestamp_option):
         if not self.is_loaded:
             return "モデルがロードされていません。"
         
@@ -19,21 +26,20 @@ class VoiceModel:
             lang = "ja"
         else:
             lang = None
+        
+        segments, _ = self.model.transcribe(audio_path, word_timestamps=True, language=lang)
+       
+        transcripts = [f"[info] This document is transcribed using: {self.device}"]
+        timelines = [f"[info] This document is transcribed using: {self.device}"]
+        for segment in segments:
+            timeline = f"[{int(segment.start // 60)}m{int(segment.start % 60)}s -> {int(segment.end // 60)}m{int(segment.end % 60)}s] {segment.text.strip()}"
 
-        result=self.model.transcribe(audio_path, language=lang)
-        if newline_option:
-            formatted_segments = []
-            for segment in result["segments"]:
-                start = format_time(segment["start"])
-                end = format_time(segment["end"])
-                text = segment["text"]
-                formatted_segments.append(f"[{start} --> {end}] {text}")
-            return '\n'.join(formatted_segments)
-  
+            timelines.append(timeline)
+            transcripts.append(segment.text)
+
+        if timestamp_option:
+            return "\n".join(timelines)
         else:
-            return result["text"]
-
-def format_time(seconds):
-        return str(timedelta(seconds=seconds))
+            return "\n".join(transcripts)
 
     

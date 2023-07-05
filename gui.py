@@ -19,7 +19,7 @@ class VoiceToTextApp:
         ## モデルサイズを選択するプルダウンリスト
         self.model_size_var = StringVar(self.root)
         self.model_size_var.set("tiny")
-        self.model_size_menu = tk.OptionMenu(self.model_frame, self.model_size_var, "tiny", "base", "small", "medium", "large")
+        self.model_size_menu = tk.OptionMenu(self.model_frame, self.model_size_var, "tiny", "base", "small", "medium", "large-v2")
         self.model_size_menu.config(width=6)
         self.model_size_menu.pack(side="left")
 
@@ -47,9 +47,9 @@ class VoiceToTextApp:
         self.options_frame = tk.Frame(self.root, bd=5)
         self.options_frame.pack()
 
-        ## ラジオボタン 改行ありorなし
-        self.newline_option = BooleanVar(value=True)  # True = 改行あり, False = 改行なし
-        newline_checkbox = tk.Checkbutton(self.options_frame, text="改行を含む", variable=self.newline_option)
+        ## ラジオボタン TimeStampあり or なし
+        self.newline_option = BooleanVar(value=True)  # True = TimeStampあり, False = なし
+        newline_checkbox = tk.Checkbutton(self.options_frame, text="TimeStampを含む", variable=self.newline_option)
         newline_checkbox.pack(side="left")
 
         ## ラジオボタン lang = ja or Other
@@ -57,6 +57,9 @@ class VoiceToTextApp:
         lang_checkbox = tk.Checkbutton(self.options_frame, text="日本語", variable=self.lang_option)
         lang_checkbox.pack(side="left")
 
+        ## device info
+        self.deviceinfo_label = tk.Label(self.options_frame, width=15, text=f"Device: {voice_model.device}")
+        self.deviceinfo_label.pack(side="left")
         # 音声データを処理するボタン
         self.transcribe_button = tk.Button(self.root, width=20, text="音声データを処理", command=self.transcribe)
         self.transcribe_button.pack()
